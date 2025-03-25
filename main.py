@@ -4,6 +4,10 @@ r"""
 """
 import modules 
 
+def main():
+    # 
+    modules.bot.run(token=modules.TOKEN)
 
-# Баготорядковий коментар - 6 лапок та текст в середині
-# .gitgnore - файл який вказує що не потрібно зберігати на git
+# 
+if __name__ == "__main__":
+    main()

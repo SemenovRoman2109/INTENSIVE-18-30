@@ -5,9 +5,9 @@ r"""
 import modules 
 
 def main():
-    # 
+    # Функція яка запускає бота, за його токеном
     modules.bot.run(token=modules.TOKEN)
 
-# 
+# Використання функції main коли файл був запущен як основний, а не як модуль
 if __name__ == "__main__":
     main()

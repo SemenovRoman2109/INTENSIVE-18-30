@@ -37,10 +37,10 @@ async def get_image(prompt: str):
         Функція для обробки запитання користувача та генерації зображення на його основі. 
     """
     response = await client_openai.images.generate(
-        model = "dall-e-2",
+        model = "dall-e-3",
         prompt = prompt,
         size="1024x1024",
-        quality= "standard"
+        quality= "hd"
     )
     return response.data[0].url
 

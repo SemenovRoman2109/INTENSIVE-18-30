@@ -20,20 +20,41 @@ bot = discord.Client(intents=intents)
 # Декоратор який реагує на подію запуск боту.
 @bot.event
 async def on_ready():
+    """
+        Ця функція буде обробляти подію запуску бота і після запуску виводить нам повідомлення "Бот запущенно" 
+    """
     print("Бот запущенно")
 
 # Декоратор який реагує на подію отримання повідомлення, від користувача.
 @bot.event
 async def on_message(message: discord.Message):
-    # Перевіряємо, що повідомлення не ботом
-    if message.author != bot.user:
-        # Зберігаємо повідомлення користувача
-        content = message.content
-        # Перевіряємо, що повідомлення не пусте
-        if content:
-            # 
-            answer = await get_responce_from_ai(content)
-            # 
+    """
+        Функція відповідає на повідомлення користувача згенероване ші. 
+        Може розпізнавати різні види запитів (текст, картинка, аудіо) 
+    """
+    try:
+        # Перевіряємо, що повідомлення не ботом
+        if message.author != bot.user:
+            # Зберігаємо повідомлення користувача
+            content = message.content
             message_for_answer = await message.channel.fetch_message(message.id)
-            # 
-            await message_for_answer.reply(answer)
+            # Перевіряємо, що повідомлення не пусте
+            if content:
+                # Обробка генерації зображень
+                if content.startswith("!image"):
+                    # Отримання відповіді згенерованого зображення
+                    answer = await get_image(prompt = content[6:])
+                    await message_for_answer.reply(answer)
+                # Обробка генерації звуків
+                elif content.startswith("!voice"):
+                    # Отримання відповіді згенерованого звуку
+                    audio = await get_voice(text = content[6:])
+                    await message_for_answer.reply("Ось звук який ви отримали:", file = discord.File(audio, filename="speech.mp3"))
+                # Обробка генерації тексту, відповіді на питання
+                else:
+                    # Отримання відповіді згенерованого тексту
+                    answer = await get_response_from_ai(content)
+                    await message_for_answer.reply(answer)
+    # Обробка помилок
+    except Exception as error:
+        print(f"Error: {error} \n in message - ",message)
